@@ -17,6 +17,14 @@
 
 	networking.useDHCP = lib.mkDefault true;
 
+	services.openssh = {
+		enable = true;
+		settings = {
+			PasswordAuthentication = true;
+			PermitRootLogin = "yes";
+		};
+	};
+
 	virtualisation.virtualbox.guest.enable = true;
 
 	nixpkgs.hostPlatform = "x86_64-linux";
