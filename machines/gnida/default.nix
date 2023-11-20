@@ -1,4 +1,4 @@
-{ inputs, lib, ... }: {
+{ inputs, lib, pkgs, ... }: {
 	imports = [
 		./disko-config.nix
 		inputs.disko.nixosModules.disko
@@ -15,7 +15,23 @@
 		efi.canTouchEfiVariables = true;
 	};
 
-	networking.useDHCP = lib.mkDefault true;
+	networking.useDHCP = lib.mkDefault false;
+
+	environment.systemPackages = with pkgs; [
+		tcpdump
+		htop
+	];
+
+	networking.bridges = {
+		"br0" = {
+			interfaces = [ "enp0s3" ];
+			rstp = true;
+		};
+	};
+
+	networking.interfaces.br0 = {
+		useDHCP = true;
+	};
 
 	services.openssh = {
 		enable = true;
